@@ -4,9 +4,9 @@
 import unicodedata
 from urllib.parse import urlparse, urlunparse
 
-import scrapy
-import requests
 import piexif
+import requests
+import scrapy
 
 URL = "http://my.yoolib.com/mht/collection/?esp=0"
 
@@ -22,6 +22,8 @@ TRANSLATE_TABLE = {
 
 
 class ThumbnailsSpider(scrapy.Spider):
+    FILENAME_TRANS_TAB = str.maketrans(*["/\0", "__"])
+
     name = "thumbnails"
     start_urls = [URL]
 
@@ -85,7 +87,7 @@ class ThumbnailsSpider(scrapy.Spider):
     @staticmethod
     def write_and_tag_picture(picture_url, media_infos):
 
-        file_name = DATA_DIR + '/' + media_infos['titre'] + '.jpeg'
+        file_name = DATA_DIR + '/' + media_infos['titre'].translate(ThumbnailsSpider.FILENAME_TRANS_TAB) + '.jpeg'
 
         with open(file_name, 'wb') as handle:
             response = requests.get(picture_url, stream=True)

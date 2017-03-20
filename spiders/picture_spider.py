@@ -3,8 +3,8 @@
 
 from urllib.parse import urlparse
 
-import scrapy
 import requests
+import scrapy
 
 URLS = [
     "http://my.yoolib.com/mht/collection/2008-yacht-auxiliaire-de-10-5-metres/?n=2131"
@@ -19,6 +19,8 @@ TRANSLATE_TABLE = {
 
 
 class PictureSpider(scrapy.Spider):
+    FILENAME_TRANS_TAB = str.maketrans(*["/\0", "__"])
+
     name = "picture"
     start_urls = URLS
 
@@ -46,7 +48,7 @@ class PictureSpider(scrapy.Spider):
     @staticmethod
     def download_picture(picture_url, title):
 
-        file_name = DATA_DIR + '/' + title + '.tif'
+        file_name = DATA_DIR + '/' + title.translate(PictureSpider.FILENAME_TRANS_TAB) + '.tif'
 
         with open(file_name, 'wb') as handle:
             response = requests.get(picture_url, stream=True)
