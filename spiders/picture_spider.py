@@ -12,7 +12,6 @@ URLS = [
 
 DATA_DIR = "/home/jean-baptiste/mht_files"
 
-
 TRANSLATE_TABLE = {
     "\xa0": "Dimensions du document"
 }
